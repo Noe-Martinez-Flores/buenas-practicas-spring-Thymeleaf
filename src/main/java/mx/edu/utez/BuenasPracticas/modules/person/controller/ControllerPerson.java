@@ -42,11 +42,12 @@ public class ControllerPerson {
     }
 
     @PostMapping(value = "/save")
-    public String savePerson(@Valid Person person, Errors erros, Model model) {
+    public String savePerson(@Valid Person person, Errors errors, Model model) {
 
-        if (erros.hasErrors()) {
+        if (errors.hasErrors()) {
             return "form";
         } else {
+            System.out.println("===============================");
             System.out.println(person.toString());
             service.savePerson(person);
             return "redirect:/person/list";
