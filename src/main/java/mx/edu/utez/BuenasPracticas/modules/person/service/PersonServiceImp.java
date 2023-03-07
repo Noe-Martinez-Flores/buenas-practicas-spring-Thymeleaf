@@ -41,5 +41,16 @@ public class PersonServiceImp implements IPersonService {
     public void deletePerson(int id) {
         data.deleteById(id);
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        List<Person> list =(List<Person>) data.findAll();
+        for (Person person : list) {
+            if (person.getEmail() == email) {
+                return true;
+            }
+        }
+        return false;
+    }
     
 }

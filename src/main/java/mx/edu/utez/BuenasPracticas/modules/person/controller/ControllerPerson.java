@@ -4,17 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 
 import mx.edu.utez.BuenasPracticas.modules.person.model.Person;
@@ -42,21 +42,25 @@ public class ControllerPerson {
     }
 
     @PostMapping(value = "/save")
-    public String savePerson(@Valid Person person, Errors errors, Model model) {
-
-        if (errors.hasErrors()) {
+    public String savePerson(@Valid Person person, Errors errors, Model model, BindingResult result){
+        try {
+            if (errors.hasErrors()) {
+                return "form";
+            } else {
+                System.out.println("===============================");
+                System.out.println(person.toString());
+                service.savePerson(person);
+                return "redirect:/person/list";
+            }
+        } catch (DataIntegrityViolationException ex ) {
+            result.rejectValue("email", "error.person", "Ya existe un usuario con este correo");
             return "form";
-        } else {
-            System.out.println("===============================");
-            System.out.println(person.toString());
-            service.savePerson(person);
-            return "redirect:/person/list";
         }
 
     }
 
     @GetMapping(value = "/edit/{id}")
-    public String editPerson(@PathVariable int id ,Model model ){
+    public String editPerson(@PathVariable int id, Model model) {
         Optional<Person> person = service.getPersonById(id);
         System.out.println(person.toString());
         model.addAttribute("person", person);
@@ -64,15 +68,16 @@ public class ControllerPerson {
     };
 
     @GetMapping(value = "/delete/{id}")
-    public String deletePerson(@PathVariable int id ,Model model ){
+    public String deletePerson(@PathVariable int id, Model model) {
         service.deletePerson(id);
         return "redirect:/person/list";
     };
 
     // @InitBinder
     // public void initBinder(WebDataBinder binder) {
-    //     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    //     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    // binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,
+    // false));
     // }
 
 }

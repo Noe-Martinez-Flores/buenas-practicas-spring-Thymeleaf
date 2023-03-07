@@ -10,4 +10,5 @@ public interface IPersonService {
     public Optional<Person> getPersonById(int id);
     public int savePerson(Person person);
     public void deletePerson(int id);
+    public boolean existsByEmail(String email);
 }
