@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -45,6 +46,7 @@ public class Person {
     @NotBlank(message = "El email no puede estar vacio")
     @NotNull(message = "El email no puede ser nulo")
     @Email(message = "El email no es valido")
+    @Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "El email no es valido")
     private String email;
 
     // @Column(name = "password", nullable = false)
@@ -55,6 +57,7 @@ public class Person {
     @Column(name = "phone", nullable = false)
     @NotBlank(message = "El telefono no puede estar vacio")
     @NotNull(message = "El telefono no puede ser nulo")
+    @Pattern(regexp = "[0-9]{10}", message = "El telefono debe ser de 10 digitos numericos")
     private String phone;
 
     @Column(name = "birth_day", nullable = false)
