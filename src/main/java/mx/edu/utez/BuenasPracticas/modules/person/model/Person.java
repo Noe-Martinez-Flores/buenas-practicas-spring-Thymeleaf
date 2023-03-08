@@ -16,6 +16,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
@@ -28,22 +29,24 @@ public class Person {
     private int id;
 
     @Column(name = "name", nullable = false, length = 50)
+    @NotBlank(message = "El nombre no puede contener solo espacios en blanco")
     @NotEmpty(message = "El nombre no puede estar vacio")
     @NotNull(message = "El nombre no puede ser nulo")
     private String name;
 
     @Column(name = "last_name", nullable = false, length = 50)
-    @NotBlank(message = "El apellido no puede estar vacio")
+    @NotBlank(message = "El apellido no puede contener solo espacios en blanco")
+    @NotEmpty(message = "El nombre no puede estar vacio")
     @NotNull(message = "El apellido no puede ser nulo")
     private String lastName;
 
     @Column(name = "second_last_name", nullable = false, length = 50)
-    @NotBlank(message = "El segundo apellido no puede estar vacio")
+    @NotBlank(message = "El segundo apellido no puede contener solo espacios en blanco")
     @NotNull(message = "El segundo apellido no puede ser nulo")
     private String secondlastName;
 
     @Column(name = "email", nullable = false, unique = true)
-    @NotBlank(message = "El email no puede estar vacio")
+    @NotBlank(message = "El email puede contener solo espacios en blanco")
     @NotNull(message = "El email no puede ser nulo")
     @Email(message = "El email no es valido")
     @Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "El email no es valido")
@@ -58,6 +61,7 @@ public class Person {
     @NotBlank(message = "El telefono no puede estar vacio")
     @NotNull(message = "El telefono no puede ser nulo")
     @Pattern(regexp = "[0-9]{10}", message = "El telefono debe ser de 10 digitos numericos")
+    @Positive(message = "El telefono debe ser un numero positivo")
     private String phone;
 
     @Column(name = "birth_day", nullable = false)
